@@ -2,8 +2,8 @@
 addpath(genpath('DAEs'))
 
 % select denoiser
-denoiser_name = 'caffe'; % make sure matCaffe is installed and its location is added to path
-% denoiser_name = 'matconvnet'; % make sure matconvnet is installed and its location is added to path
+% denoiser_name = 'caffe'; % make sure matCaffe is installed and its location is added to path
+denoiser_name = 'matconvnet'; % make sure matconvnet is installed and its location is added to path
 
 % set to 0 if you want to run on CPU (very slow)
 use_gpu = 1;
@@ -11,12 +11,15 @@ use_gpu = 1;
 
 %% Load data
 
+run('\\intra.tut.fi\home\torresva\My Documents\MATLAB\matconvnet\matlab\vl_setupnn.m');
 % load image and kernel
 load('data/kernels.mat');
 
 gt = double(imread('data/101085.jpg'));
 
-kernel = kernels{1};
+if use_gpu, gt = gpuArray(gt); end
+
+kernel = kernels{3};
 sigma_d = 255 * .01;
 
 degraded = convn(gt, rot90(kernel,2), 'valid');
